@@ -8,20 +8,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:246031338883:android:aa590d09c8b7b83443fab6",
+        "mobilesdk_app_id": "1:246031338883:android:c5ad70a924114bff43fab6",
         "android_client_info": {
-          "package_name": "com.youssefdirani.androidfcmnew"
+          "package_name": "com.youssefdirani.citizen"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "246031338883-1nbptql7tpsgc17bvch1b764oupbaosm.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.youssefdirani.androidfcmnew",
-            "certificate_hash": "6487f292695fa949b5aeaac9c78ae8d99d9ee825"
-          }
-        },
         {
           "client_id": "246031338883-ealc3fqg1gredu00vmg3prgfjgfn7kv8.apps.googleusercontent.com",
           "client_type": 3

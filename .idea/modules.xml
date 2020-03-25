@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AndroidFCMNew.iml" filepath="$PROJECT_DIR$/AndroidFCMNew.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AppToApNotification.iml" filepath="$PROJECT_DIR$/AppToApNotification.iml" />
+      <module fileurl="file://$PROJECT_DIR$/citizenSOS/citizenSOS.iml" filepath="$PROJECT_DIR$/citizenSOS/citizenSOS.iml" />
       <module fileurl="file://$PROJECT_DIR$/municipalitypolice/municipalitypolice.iml" filepath="$PROJECT_DIR$/municipalitypolice/municipalitypolice.iml" />
     </modules>
   </component>

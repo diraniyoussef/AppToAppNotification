@@ -1,2 +1,2 @@
-include ':app', ':municipalitypolice'
-rootProject.name='AndroidFCMNew'
+include ':citizenSOS', ':municipalitypolice'
+rootProject.name='AppToApNotification'
