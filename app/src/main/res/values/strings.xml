@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AndroidFCMNew</string>
+    <string name="default_notification_channel_id">MyNotificationChannel</string>
+    <string name="msg_token_fmt">"bla </string>
+</resources>
