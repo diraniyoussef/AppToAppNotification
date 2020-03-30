@@ -6,6 +6,7 @@ package automatefcm;
 import java.io.FileInputStream;
 //import java.io.FileNotFoundException;
 
+import com.google.api.client.googleapis.notifications.NotificationUtils;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -13,6 +14,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
+import com.google.firebase.messaging.Notification.Builder;
 
 public class Library {
     public boolean someLibraryMethod() {
@@ -37,10 +40,17 @@ public class Library {
 			String registrationToken = "dnDKnrnkTKaT_UWkMOjeC9:APA91bFSHf4aXpztUkKuTqqluy-E0vptv1akYkGby2tAZocPnbFlZnwTbAPESfZSNPe24qQmxLWp3lDe6s5iXEIq0bbXm40i3raHOfjVJUy05l14h8_owRnKm7mCRHHMaCIOY_Ohvkz3";
 
 			// See documentation on defining a message payload.
+			Builder builder = Notification.builder()
+					.setTitle("A lovely title")
+					.setBody("Jessy is the body");		
+			Notification notification = builder.build();
+			
+			//Notification notification = new Notification("A title", "I'm a body ?");
 			Message message = Message.builder()
 			    .putData("score", "850")
 			    .putData("time", "2:45")
-			    .putData("Server's message", "Thank God I made it")
+			    .putData("Server's message", "Thank God I made it")			   
+			    .setNotification(notification)
 			    .setToken(registrationToken)
 			    .build();
 

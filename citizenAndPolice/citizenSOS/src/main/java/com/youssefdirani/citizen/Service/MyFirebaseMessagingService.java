@@ -56,12 +56,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity( this, 0 , intent, PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id));
-        notificationBuilder.setContentTitle("FCM Notification");
+//        notificationBuilder.setContentTitle("FCM Notification");
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         if( notification != null ) {
-            notification.getBody();
-            String s = remoteMessage.getNotification().getBody();
+            String s = notification.getBody();
             notificationBuilder.setContentText(s);
+            notificationBuilder.setContentTitle(notification.getTitle());
             notificationBuilder.setAutoCancel(true);
             //notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
             notificationBuilder.setSmallIcon(R.drawable.ic_stat_ic_notification);
