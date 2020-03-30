@@ -6,7 +6,6 @@ package automatefcm;
 import java.io.FileInputStream;
 //import java.io.FileNotFoundException;
 
-import com.google.api.client.googleapis.notifications.NotificationUtils;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -18,6 +17,12 @@ import com.google.firebase.messaging.Notification;
 import com.google.firebase.messaging.Notification.Builder;
 
 public class Library {
+	public static void main(String[] args) {
+        Library classUnderTest = new Library();
+        //assertTrue("someLibraryMethod should return 'true'", classUnderTest.someLibraryMethod());
+        classUnderTest.someLibraryMethod();
+//        System.out.println("ending testSomeLibraryMethod()");
+    }
     public boolean someLibraryMethod() {
     	try {
     		//System.out.println("before serviceAccount");
