@@ -1,2 +1,0 @@
-include ':citizenSOS', ':municipalitypolice'
-rootProject.name='citizenAndPolice'

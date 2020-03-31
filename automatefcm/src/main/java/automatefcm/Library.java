@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 //import java.io.FileNotFoundException;
 
 import com.google.auth.oauth2.GoogleCredentials;
+//import com.google.auth.oauth2.ComputeEngineCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,16 +27,22 @@ public class Library {
     public boolean someLibraryMethod() {
     	try {
     		//System.out.println("before serviceAccount");
-			//https://firebase.google.com/docs/admin/setup
-    		FileInputStream serviceAccount =
+			//https://firebase.google.com/docs/admin/setup    		
+    		FileInputStream serviceAccount = //it's probably bad to place the json file explicitly. Better use the [System.Environment]::SetEnvironmentVariable('GOOGLE_APPLICATION_CREDENTIALS','C:\Users\Dirani\eclipse-workspace\automatefcm\citizenandpolice-83361-firebase-adminsdk-witzk-c777f8ddc1.json') in Power shell or (if it wasn't saved, which can be checked using [System.Environment]::SetEnvironmentVariable('GOOGLE_APPLICATION_CREDENTIALS','C:\Users\Dirani\eclipse-workspace\automatefcm\citizenandpolice-83361-firebase-adminsdk-witzk-c777f8ddc1.json') ) then set the environment variable manually
 				  new FileInputStream("./citizenandpolice-83361-firebase-adminsdk-witzk-c777f8ddc1.json");
 			//System.out.println("before options");
 			FirebaseOptions options = new FirebaseOptions.Builder()
-		  			  .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+		  			  .setCredentials(GoogleCredentials.fromStream(serviceAccount)) 
+					  /*had difficulty persisting the environment variable
+						Then it persisted when I did it manually, Advanced System Settings -> Advanced tab -> Environment variables ...
+						Then I just had to restart the eclipse IDE and it worked when run from the IDE but not in the exported jar file 
+					  */
+					  //.setCredentials( GoogleCredentials.getApplicationDefault() )  
 		  			  .setDatabaseUrl("https://citizenandpolice-83361.firebaseio.com") 
 		  			  .build();
 			//System.out.println("before initializeApp");
 			FirebaseApp defaultApp = FirebaseApp.initializeApp(options);
+			
 			System.out.println("My app is " + defaultApp.getName());
 			FirebaseAuth defaultAuth = FirebaseAuth.getInstance(defaultApp);
 			FirebaseDatabase defaultDatabase = FirebaseDatabase.getInstance(defaultApp);
@@ -61,9 +68,9 @@ public class Library {
 
 			// Send a message to the device corresponding to the provided
 			// registration token.
-			String response = FirebaseMessaging.getInstance().send(message);
+			String response = FirebaseMessaging.getInstance(defaultApp).send(message);
 			// Response is a message ID string.
-			System.out.println("Successfully sent message: " + response);
+			System.out.println("Successfully sent message : " + response);
 			//System.out.println("after initializeApp");
     	} catch (Exception e) {
 			// TODO Auto-generated catch block
