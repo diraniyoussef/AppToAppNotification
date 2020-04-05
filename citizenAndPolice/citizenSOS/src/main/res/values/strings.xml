@@ -2,7 +2,7 @@
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
         AIzaSyD9FeKdwhFl58afppQlGlzi1EiqaBTj0UI
     </string>
-    <string name="app_name">AndroidFCMNew</string>
+    <string name="app_name">تعميم</string>
     <string name="default_notification_channel_id">MyNotificationChannel</string>
-    <string name="msg_token_fmt">"bla </string>
+    <string name="msg_token_fmt">bla</string>
 </resources>

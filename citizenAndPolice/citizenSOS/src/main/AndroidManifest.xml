@@ -43,7 +43,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name="com.youssefdirani.citizen.Service.MyFirebaseMessagingService"
+            android:name=".Service.MyFirebaseMessagingService"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -51,8 +51,8 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="com.youssefdirani.citizen.Service.LocationUpdatesReceiver"
-            android:exported="true">
+        <receiver android:name=".Service.LocationUpdatesReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.youssefdirani.citizen.LocationUpdatesReceiver.ACTION_PROCESS_UPDATES" />
                 <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->

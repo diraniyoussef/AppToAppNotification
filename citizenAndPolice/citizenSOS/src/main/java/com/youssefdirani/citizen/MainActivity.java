@@ -1,33 +1,20 @@
 package com.youssefdirani.citizen;
 
-import androidx.annotation.NonNull;
 //import androidx.appcompat.app.AlertDialog;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 //import android.content.DialogInterface;
 import android.Manifest;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-import com.youssefdirani.citizen.Service.LocationUpdatesReceiver;
 import com.youssefdirani.citizen.Service.RequestLocationWorkManager;
 
 import org.jetbrains.annotations.NotNull;
@@ -70,37 +57,6 @@ public class MainActivity extends AppCompatActivity {
          */
         //Log.i("MainActivity","My device info are : " + DeviceInformation.getInfosAboutDevice(MainActivity.this) );
         //startService( new Intent( MainActivity.this, MyFirebaseMessagingService.class ) ); //no need to
-
-        //this is to get the "current" registration token.
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        final String TAG = "FirebaseInstanceId";
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "getInstanceId failed", task.getException());
-                            return;
-                        }
-
-                        // Get new Instance ID token
-                        String token = "no token !";
-                        InstanceIdResult iir = task.getResult();
-                        if( iir != null ) {
-                            token = iir.getToken();
-                        }
-                        // Log and toast
-                        //String msg = getString(R.string.msg_token_fmt, token); //Didn't find its signature
-                        String msg = token;
-                        Log.d(TAG, msg);
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         if (ActivityCompat.checkSelfPermission( this.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission( this.getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
@@ -113,7 +69,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.i("Youssef MainAct", "permissions are fine in onConnected");
             setRequestLocationWorkManager();
+            //Can I avoid setting work manager if it has already been set ?
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -121,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         boolean allRequestsAreGranted = true;
-        if (requestCode == 1) {
+        if( requestCode == 1 ) {
             for (int i = 0; i < permissions.length; i++) {
                 String permission = permissions[i];
                 int grantResult = grantResults[i];
@@ -134,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             if( allRequestsAreGranted ) {
-                Log.i("Youssef", "in onRequestPermissionsResult");
+                Log.i("Youssef MainAct", "in onRequestPermissionsResult");
                 setRequestLocationWorkManager();
             } else {
                 //requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSIONS_CODE);
@@ -145,18 +107,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void setRequestLocationWorkManager() {
+    private void setRequestLocationWorkManager() {
         Constraints constraints = new Constraints.Builder()
                 .setRequiresCharging(false)
                 .build();
 
         PeriodicWorkRequest saveRequest =
-                new PeriodicWorkRequest.Builder(RequestLocationWorkManager.class, 1, TimeUnit.MINUTES)
+                new PeriodicWorkRequest.Builder(RequestLocationWorkManager.class, 30, TimeUnit.MINUTES)
                         .setConstraints(constraints)
                         .build();
-
+        /*The value of PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS is fixed and it is equivalent to 15 minutes
+        Log.i("Youssef MainAct", String.valueOf(PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS ));
+         */
+        WorkManager instance = WorkManager.getInstance( getApplicationContext() );
+        instance.enqueueUniquePeriodicWork("work_RequestLocation", ExistingPeriodicWorkPolicy.KEEP , saveRequest);
+/*
         WorkManager.getInstance(this)
-                .enqueue(saveRequest);
-    }
+                .enqueue(saveRequest); //using enqueueUniquePeriodicWork it won't run again if we issue again the same command. https://stackoverflow.com/questions/51612274/check-if-workmanager-is-scheduled-already
+ */
 
+    }
 }

@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -11,13 +12,15 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.youssefdirani.citizen.Announcement;
 import com.youssefdirani.citizen.MainActivity;
 import com.youssefdirani.citizen.R;
+import com.youssefdirani.citizen.SendLocationToServer;
 
 import java.util.Map;
 
 import androidx.core.app.NotificationCompat;
+import androidx.lifecycle.MutableLiveData;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-
+    public MutableLiveData<Integer> port = new MutableLiveData<>();
     final private String TAG = "MyFirebaseMessag...";
 
     @Override
@@ -57,6 +60,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "Inside onMessageReceived.   From: " + remoteMessage.getFrom());
         // Checking if message contains a data payload and if it has a notification (this is my convention)
+
         Map<String, String> data_map = remoteMessage.getData();
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         if( remoteMessage.getData().size() <= 0 || notification == null ) {
@@ -90,6 +94,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private boolean isMessageDataConsistent( Map<String, String> data_map, Announcement announcement ) {
+        //checking if the received message is a request to change the port this device sends its location on.
+        String new_server_port_to_send_locations_on = data_map.get("new_server_port_to_send_locations_on");
+        if( new_server_port_to_send_locations_on != null ) {
+            try {
+                 int port = Integer.parseInt(new_server_port_to_send_locations_on);
+                //Integer.parseUnsignedInt(...); // this requires higher min api level
+                if( port >= 0 ) {
+                    //SendLocationToServer.port = port;
+                    final SharedPreferences client_app_data = getApplicationContext()
+                            .getSharedPreferences("client_app_data", MODE_PRIVATE);
+                    SharedPreferences.Editor prefs_editor = client_app_data.edit();
+                    prefs_editor.putInt( "server_port_to_send_locations_on", port ).apply();
+                    return true;
+                } else { //should never happpen
+                    return false;
+                }
+            } catch (NumberFormatException e) { //if the number is not valid. Usually should never happen
+                return false;
+            } catch (Exception e) {//I'm afraid this can happen if SendLocationToServer.port threw an error
+                return false;
+            }
+        }
+
+        //Now trying with the usual message type of announcement
         announcement.announcer = data_map.get("announcer");
         announcement.announcement = data_map.get("announcement");
         String center_lat = data_map.get("center_lat");
