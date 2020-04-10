@@ -125,7 +125,7 @@ public class SendLocationToServer extends Thread {
             DatagramPacket p = new DatagramPacket(message, message.length, server_IP, port);
             DatagramSocket s = new DatagramSocket();
             s.send(p);
-            Log.i("Youssef SendLoc..", "New outputStreams is made, for panel index ");
+            Log.i("Youssef SendLoc..", "datagram packet is sent to server on port " + port);
             /* //I changed my  mind because I will close the UDP in the server side right after I get the datagram there.
             //now closing the udp socket after 2 seconds
             new Handler().postDelayed(new Runnable() {
@@ -137,7 +137,7 @@ public class SendLocationToServer extends Thread {
         } catch (Exception e) {//I hope this includes the IOException or the UnknownHostException because this will be thrown
             //in case the IP is wrong or the electricity on module is down.
             e.printStackTrace();
-            Log.i("Youssef SendLoc..", "Error: UDP connection to " + port + "or maybe in datagram sent.");
+            Log.i("Youssef SendLoc..", "Error: UDP connection to " + port + " or maybe in datagram sent.");
         }
     }
 
